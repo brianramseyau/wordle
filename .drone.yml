@@ -1,8 +1,7 @@
----
 
 kind: pipeline
 type: docker
-name: latest
+name: wordle
 
 platform:
   os: linux
@@ -14,9 +13,9 @@ steps:
     pull: if-not-exists
     commands:
       - hadolint --version
-      - hadolint docker/Dockerfile*
+      - hadolint Dockerfile*
 
-  - name: latest  
+  - name: wordle
     image: thegeeklab/drone-docker-buildx
     privileged: true
     settings:
@@ -24,7 +23,7 @@ steps:
       purge: true
       compress: true
       use_cache: true
-      dockerfile: docker/Dockerfile
+      dockerfile: Dockerfile
       build_args: BUILDKIT_INLINE_CACHE=1
       cache_from: "modem7/wordle:latest"
       platforms: # if it doesn't work run docker run --privileged --rm tonistiigi/binfmt --install all
@@ -34,7 +33,9 @@ steps:
         from_secret: docker_username
       password:
         from_secret: docker_password
-      tags: latest
+      tags:
+        - latest
+        - legacy
 
   - name: pushrm-dockerhub
     image: chko/docker-pushrm
@@ -49,57 +50,6 @@ steps:
     when:
       status:
         - success
-
-  - name: slack
-    image: themaz/drone-slack
-    settings:
-      webhook:
-        from_secret: slack_hook
-    when:
-      status: [ success, failure ]
-
-trigger:
-  event:
-    - custom
-
----
-
-kind: pipeline
-type: docker
-name: legacy
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-  - name: Lint Dockerfile
-    image: hadolint/hadolint:latest-alpine
-    pull: if-not-exists
-    commands:
-      - hadolint --version
-      - hadolint legacy/Dockerfile*
-
-  - name: legacy  
-    image: thegeeklab/drone-docker-buildx
-    privileged: true
-    settings:
-      repo: modem7/wordle
-      purge: true
-      compress: true
-      use_cache: true
-      dockerfile: legacy/Dockerfile
-      build_args: BUILDKIT_INLINE_CACHE=1
-      context: legacy/
-      cache_from: "modem7/wordle:legacy"
-      platforms: # if it doesn't work run docker run --privileged --rm tonistiigi/binfmt --install all
-        - linux/amd64
-        - linux/arm64
-      username:
-        from_secret: docker_username
-      password:
-        from_secret: docker_password
-      tags: legacy
 
   - name: slack
     image: themaz/drone-slack

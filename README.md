@@ -1,56 +1,15 @@
-# React Wordle
+# Self-hosted, self-contained [Wordle](https://www.powerlanguage.co.uk/wordle/) clone (legacy)
 
 ![Docker Pulls](https://img.shields.io/docker/pulls/modem7/wordle)
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/modem7/wordle/latest)
 [![Build Status](https://drone.modem7.com/api/badges/modem7/react-wordle/status.svg)](https://drone.modem7.com/modem7/react-wordle)
 [![GitHub last commit](https://img.shields.io/github/last-commit/modem7/react-wordle)](react-wordle)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/modem7/react-wordle/React%20app%20deployement?label=gh%20pages)
 
-This is a clone project of the popular word guessing game we all know and love. Made using React, Typescript, and Tailwind.
+This is the original NYT-style Wordle, cloned from the original website and served from a self-contained Nginx container. It uses the original date-based word-of-the-day logic and progress storage, in line with the real NYT Wordle.
 
-Modified by [modem7](https://github.com/modem7) for github-pages. 
+There is no other flavor of this app in this repo any more — the "latest" React/Tailwind rewrite has been removed so there's only one thing to maintain and one thing to trust your saved stats with.
 
-[**Try it out!**](https://modem7.github.io/react-wordle/)
-
-# Breaking changes note
-This repo has now been merged with the old Worlde repo which had the old NYT container. 
-
-The reasoning for this is to lower maintenance across multiple repos and reduce build time. 
-
-There is also a [Github pages](https://modem7.github.io/react-wordle/) version of "latest".
-
-As such, there is a new configuration: 
-
-## Latest
-This is a new version of Wordle, created by [cwackerfuss](https://github.com/cwackerfuss/react-wordle), and as such, it will not match with the latest "Word of the day". 
-
-Please see the configuration below to set this up. 
-
-## Legacy
-This is the original Worlde, cloned from the orignal website, and shunted into an Nginx container. This is as close as you'll get to the NYT version, and it should be in line with the latest word of the day. 
-
-This will not be updated, except for security updates and Nginx updates.
-
-Please see the configuration below to set this up.
-
-# Configuration
-
-## Latest
-Note: Sharing feature requires this to be hosted via https as per [#331](https://github.com/cwackerfuss/react-wordle/issues/331#issuecomment-1073155476).
-
-```yaml
-version: "2.4"
-
-services:
-
-  wordle:
-    image: modem7/wordle:latest
-    container_name: Wordle
-    ports:
-      - 80:8080
-```
-
-## Legacy
+## Docker
 
 ```yaml
 version: "2.4"
@@ -64,15 +23,18 @@ services:
       - 80:80
 ```
 
-# Tags
-| Tag | Description |
-| :----: | --- |
-| latest | Latest version |
-| legacy | Legacy version |
+The `latest` tag on Docker Hub now points at the same image as `legacy`, for backwards compatibility with existing compose files.
+
+### Routing
+
+Every path the nginx container serves returns the app itself with an HTTP 200 — there is no path that produces a real 404. Unknown/deep-link paths are served `index.html` directly (`try_files $uri $uri/ /index.html;` in [conf/nginx-site.conf](conf/nginx-site.conf)), rather than the old approach of redirecting a 404 error page to `index.html` (which kept responding with a 404 status while still rendering the app).
+
+## Native Android app
+
+The [`mobile/`](mobile/) directory contains a [Capacitor](https://capacitorjs.com/) wrapper that bundles the exact same static site from [`public/`](public/) into a native Android app. Because it's a distinct installed app, its WebView gets its own private storage sandbox from Android — completely separate from Chrome, Firefox, or any other browser on the device, and from any other app's WebView. Clearing your browser cache/cookies (the thing that keeps wiping progress in-browser) cannot touch it.
+
+See [mobile/README.md](mobile/README.md) for how to build and install the debug APK.
 
 ## Project Screenshot
 
-![image](https://user-images.githubusercontent.com/4349962/158677511-50faa60b-26a1-4880-a580-b433389f03aa.png)
-
-## Original Project
-[Cwackerfuss/React-Wordle](https://github.com/cwackerfuss/react-wordle)
+![image](https://user-images.githubusercontent.com/4349962/152651710-32fc8be9-b63a-47b3-b1f3-ec7baf0e34f8.png)

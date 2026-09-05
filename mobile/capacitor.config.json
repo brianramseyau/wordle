@@ -1,0 +1,8 @@
+{
+  "appId": "com.wordlelegacy.app",
+  "appName": "Wordle Legacy",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false
+  }
+}

@@ -1,39 +1,21 @@
 {
-  "short_name": "Reactle",
-  "name": "Reactle",
+  "short_name": "Wordle",
+  "name": "Wordle",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "/images/wordle_logo_32x32.png",
+      "type": "image/png",
+      "sizes": "32x32"
     },
     {
-      "src": "logo192.png",
+      "src": "/images/wordle_logo_192x192.png",
       "type": "image/png",
-      "sizes": "192x192",
-      "purpose": "any"
-    },
-    {
-      "src": "logo512.png",
-      "type": "image/png",
-      "sizes": "512x512",
-      "purpose": "any"
-    },
-    {
-      "src": "logo192.png",
-      "type": "image/png",
-      "sizes": "192x192",
-      "purpose": "maskable"
-    },
-    {
-      "src": "logo512.png",
-      "type": "image/png",
-      "sizes": "512x512",
-      "purpose": "maskable"
+      "sizes": "192x192"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
+  "background_color": "#6aaa64",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#0f172a"
+  "theme_color": "#6aaa64",
+  "description": "A daily word game"
 }

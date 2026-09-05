@@ -1,0 +1,17 @@
+{
+  "name": "wordle-legacy-mobile",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Native Android wrapper for the legacy Wordle static site",
+  "scripts": {
+    "copy:web": "rm -rf www && mkdir -p www && cp -R ../public/. www/",
+    "sync": "npm run copy:web && cap sync android",
+    "open:android": "npm run sync && cap open android",
+    "build:debug": "npm run sync && cd android && ./gradlew assembleDebug"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.2.2",
+    "@capacitor/cli": "^6.2.2",
+    "@capacitor/core": "^6.2.2"
+  }
+}
