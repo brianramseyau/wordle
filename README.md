@@ -1,15 +1,12 @@
 # Self-hosted, self-contained [Wordle](https://www.powerlanguage.co.uk/wordle/) clone (legacy)
 
-![Docker Pulls](https://img.shields.io/docker/pulls/modem7/wordle)
-![Docker Image Size (tag)](https://img.shields.io/docker/image-size/modem7/wordle/latest)
-[![Build Status](https://drone.modem7.com/api/badges/modem7/react-wordle/status.svg)](https://drone.modem7.com/modem7/react-wordle)
-[![GitHub last commit](https://img.shields.io/github/last-commit/modem7/react-wordle)](react-wordle)
-
 This is the original NYT-style Wordle, cloned from the original website and served from a self-contained Nginx container. It uses the original date-based word-of-the-day logic and progress storage, in line with the real NYT Wordle.
 
 There is no other flavor of this app in this repo any more — the "latest" React/Tailwind rewrite has been removed so there's only one thing to maintain and one thing to trust your saved stats with.
 
 ## Docker
+
+Images are built and published to the GitHub Container Registry by the [Docker CI](.github/workflows/Docker%20CI.yml) workflow on every push to `master`.
 
 ```yaml
 version: "2.4"
@@ -17,13 +14,11 @@ version: "2.4"
 services:
 
   wordle:
-    image: modem7/wordle:legacy
+    image: ghcr.io/brianramseyau/wordle:latest
     container_name: Wordle
     ports:
       - 80:80
 ```
-
-The `latest` tag on Docker Hub now points at the same image as `legacy`, for backwards compatibility with existing compose files.
 
 ### Routing
 
